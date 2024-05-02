@@ -12,21 +12,34 @@ function App () {
   const [currentEdit,setCurrentEdit] = useState("");
   const [currentEditedItem,setCurrentEditedItem] = useState("");
 
-  const handleAddTodo = () => {
-    let newTodoItem = {
+  const handleAddTodo = (e) => {
+    if(newTitle===" ") {
+      e.preventDefault();
+      
+    }
+    else if(newDescription===" ") {
+      e.preventDefault();
+    }
+    else {
+      e.preventDefault();
+      let newTodoItem = {
       title: newTitle,
       description: newDescription,
-    };
+      };
 
-    let updatedTodoArr = [...allTodos];
-    updatedTodoArr.push (newTodoItem);
-    setTodos (updatedTodoArr);
-    localStorage.setItem ('todolist', JSON.stringify (updatedTodoArr));
+      let updatedTodoArr = [...allTodos];
+      updatedTodoArr.push (newTodoItem);
+      setTodos (updatedTodoArr);
+      localStorage.setItem ('todolist', JSON.stringify (updatedTodoArr));
+      setNewTitle(" ");
+      setNewDescription(" ");
+      }
+    
   };
 
   const handleDeleteTodo = index => {
     let reducedTodo = [...allTodos];
-    reducedTodo.splice (index);
+    reducedTodo.splice (index,1);
 
     localStorage.setItem ('todolist', JSON.stringify (reducedTodo));
     setTodos (reducedTodo);
@@ -60,7 +73,7 @@ function App () {
 
   const handleDeleteCompletedTodo = index => {
     let reducedTodo = [...completedTodos];
-    reducedTodo.splice (index);
+    reducedTodo.splice (index,1);
 
     localStorage.setItem ('completedTodos', JSON.stringify (reducedTodo));
     setCompletedTodos (reducedTodo);
@@ -113,7 +126,9 @@ function App () {
       <h1>My Todos</h1>
 
       <div className="todo-wrapper">
+      <form onSubmit={handleAddTodo}>
         <div className="todo-input">
+          
           <div className="todo-input-item">
             <label>Title</label>
             <input
@@ -126,23 +141,28 @@ function App () {
           <div className="todo-input-item">
             <label>Description</label>
             <input
-              type="text"
+              type="text" 
               value={newDescription}
               onChange={e => setNewDescription (e.target.value)}
               placeholder="What's the task description?"
+              
             />
           </div>
-          <div className="todo-input-item">
-            <button
-              type="button"
-              onClick={handleAddTodo}
-              className="primaryBtn"
-            >
-              Add
-            </button>
-          </div>
-        </div>
+          
 
+          <div className="todo-input-item">
+            
+              <button
+              type="submit"  
+              onClick={handleAddTodo} 
+              className="primaryBtn" 
+              >
+              Add 
+              </button>
+          </div>
+          
+        </div>
+        </form>
         <div className="btn-area">
           <button
             className={`secondaryBtn ${isCompleteScreen === false && 'active'}`}
